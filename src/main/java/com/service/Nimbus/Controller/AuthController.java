@@ -4,7 +4,9 @@ import com.service.Nimbus.DTO.JwtResponse;
 import com.service.Nimbus.DTO.LoginRequest;
 import com.service.Nimbus.Model.User;
 import com.service.Nimbus.Service.LoginAndRegister;
+import com.service.Nimbus.Service.RedisTokenBlacklistService;
 import com.service.Nimbus.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,10 +24,13 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
 
-    public AuthController(LoginAndRegister loginAndRegister, AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
+    private final RedisTokenBlacklistService blacklistService;
+
+    public AuthController(LoginAndRegister loginAndRegister, AuthenticationManager authenticationManager, JwtUtil jwtUtil, RedisTokenBlacklistService blacklistService) {
         this.loginAndRegister = loginAndRegister;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
+        this.blacklistService=blacklistService;
     }
 
     @GetMapping("/health")
@@ -57,6 +62,22 @@ public class AuthController {
 
         String Token = jwtUtil.generateToken((UserDetails) authentication.getPrincipal());
         return ResponseEntity.ok(new JwtResponse(Token));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(HttpServletRequest request) {
+        System.out.println("Logout called");
+        String header = request.getHeader("Authorization");
+        if(header != null && header.startsWith("Bearer ")) {
+            String token = header.substring(7);
+            System.out.println("Invalidating token: " + token);
+            long expiration = jwtUtil.getExpirationDateFromToken(token).getTime() - System.currentTimeMillis();
+            blacklistService.blacklistToken(token, expiration);
+        } else {
+            System.out.println("No valid token found for logout.");
+        }
+        System.out.println("User logged out successfully.");
+        return ResponseEntity.ok("User logged out successfully.");
     }
 
     @PostMapping("/content")

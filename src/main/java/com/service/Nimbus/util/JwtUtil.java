@@ -1,6 +1,7 @@
 package com.service.Nimbus.util;
 
 import com.service.Nimbus.Model.User;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import io.jsonwebtoken.security.Keys;
 import java.security.Key;
+import java.util.Calendar;
 import java.util.Date;
 
 @Component
@@ -49,4 +51,15 @@ public class JwtUtil {
         return expiration.before(new Date());
     }
 
+    public Date getExpirationDateFromToken(String token) {
+        return extractAllClaims(token).getExpiration();
+    }
+
+    private Claims extractAllClaims(String token) {
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+    }
 }

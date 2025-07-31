@@ -9,10 +9,18 @@ services:
       POSTGRES_PASSWORD: password
     ports:
       - "5432:5432"
+  Redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
   Nimbus:
     image: nimbus
     depends_on:
       - postgres
+      - Redis
     ports:
       - "8080:8080"
     environment:
@@ -22,3 +30,4 @@ services:
 
 volumes:
   postgres_data: {}
+  redis_data: {}

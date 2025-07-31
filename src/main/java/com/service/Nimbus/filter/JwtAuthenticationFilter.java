@@ -1,6 +1,7 @@
 package com.service.Nimbus.filter;
 
 import com.service.Nimbus.Service.CustomUserDetailsService;
+import com.service.Nimbus.Service.RedisTokenBlacklistService;
 import com.service.Nimbus.util.JwtUtil;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletResponse;
@@ -20,10 +21,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final CustomUserDetailsService customUserDetailsService;
+    private final RedisTokenBlacklistService blacklistService;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, CustomUserDetailsService customUserDetailsService, RedisTokenBlacklistService blacklistService) {
         this.jwtUtil = jwtUtil;
         this.customUserDetailsService = customUserDetailsService;
+        this.blacklistService=blacklistService;
     }
 
     @Override
@@ -57,6 +60,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+            if (blacklistService.isTokenBlacklisted(token)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "User is logged out.. Login again!!");
+                return;
+            }
             if(jwtUtil.validateToken(token, userDetails)) {
                 var authentication = new org.springframework.security.authentication.UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
