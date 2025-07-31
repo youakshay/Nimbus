@@ -31,9 +31,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getServletPath().equals("/api/v1/controller/login")
-                || request.getServletPath().equals("/api/v1/controller/register")
-                || request.getServletPath().equals("/api/v1/controller/health");
+        return request.getServletPath().equals("/api/v1/auth/login")
+                || request.getServletPath().equals("/api/v1/auth/register")
+                || request.getServletPath().equals("/api/v1/auth/health");
     }
 
     @Override
@@ -73,9 +73,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
         }
-
-        System.out.println(token+" "+username);
-
         filterChain.doFilter(request, response);
     }
 }

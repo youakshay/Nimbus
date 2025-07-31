@@ -28,7 +28,7 @@ public class AppSecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth
-                                .requestMatchers("/api/v1/controller/health", "/api/v1/controller/login", "/api/v1/controller/register").permitAll()
+                                .requestMatchers("/api/v1/auth/health", "/api/v1/auth/login", "/api/v1/auth/register").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -1,8 +1,10 @@
 package com.service.Nimbus.Service;
 
+import com.service.Nimbus.DTO.UpdatePassword;
 import com.service.Nimbus.Model.User;
 import com.service.Nimbus.Respository.CrudRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.relational.core.query.Update;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 
@@ -11,8 +13,8 @@ import java.util.Optional;
 @Repository
 public class LoginAndRegister {
     private final CrudRepo repository;
-
     private PasswordEncoder passwordEncoder;
+
 
     public LoginAndRegister(CrudRepo repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
@@ -40,15 +42,4 @@ public class LoginAndRegister {
         repository.save(updatedUserDetails);
         System.out.println("User registered successfully.");
     }
-
-//    public void login(String username, String password) {
-//        User user = repository.findByUsername(username)
-//                .orElseThrow(() -> new IllegalArgumentException("User not found."));
-//
-//        if (!passwordEncoder.matches(password, user.password())) {
-//            throw new IllegalArgumentException("Invalid password.");
-//        }
-//
-//        System.out.println("User logged in successfully.");
-//    }
 }

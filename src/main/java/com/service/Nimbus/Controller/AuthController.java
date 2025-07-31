@@ -2,9 +2,11 @@ package com.service.Nimbus.Controller;
 
 import com.service.Nimbus.DTO.JwtResponse;
 import com.service.Nimbus.DTO.LoginRequest;
+import com.service.Nimbus.DTO.UpdatePassword;
 import com.service.Nimbus.Model.User;
 import com.service.Nimbus.Service.LoginAndRegister;
 import com.service.Nimbus.Service.RedisTokenBlacklistService;
+import com.service.Nimbus.Service.UpdateUserDetails;
 import com.service.Nimbus.util.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.ResponseEntity;
@@ -16,21 +18,26 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController()
-@RequestMapping("/api/v1/controller")
+@RequestMapping("/api/v1/auth")
 @CrossOrigin
 public class AuthController {
 
     private final LoginAndRegister loginAndRegister;
     private final AuthenticationManager authenticationManager;
     private final JwtUtil jwtUtil;
-
+    private final UpdateUserDetails updateUserDetails;
     private final RedisTokenBlacklistService blacklistService;
 
-    public AuthController(LoginAndRegister loginAndRegister, AuthenticationManager authenticationManager, JwtUtil jwtUtil, RedisTokenBlacklistService blacklistService) {
+    public AuthController(LoginAndRegister loginAndRegister,
+                          AuthenticationManager authenticationManager,
+                          JwtUtil jwtUtil,
+                          RedisTokenBlacklistService blacklistService,
+                          UpdateUserDetails updateUserDetails) {
         this.loginAndRegister = loginAndRegister;
         this.jwtUtil = jwtUtil;
         this.authenticationManager = authenticationManager;
         this.blacklistService=blacklistService;
+        this.updateUserDetails = updateUserDetails;
     }
 
     @GetMapping("/health")
@@ -44,6 +51,11 @@ public class AuthController {
         // Logic to handle user registration
         System.out.println("Registering user with details: " + userDetails);
         loginAndRegister.register(userDetails);
+    }
+
+    @PostMapping("/updatepassword")
+    public void updatePassword(@RequestBody UpdatePassword updatedPassword, HttpServletRequest request) {
+        updateUserDetails.updatePassword(updatedPassword, request);
     }
 
     @PostMapping("/login")
@@ -78,12 +90,5 @@ public class AuthController {
         }
         System.out.println("User logged out successfully.");
         return ResponseEntity.ok("User logged out successfully.");
-    }
-
-    @PostMapping("/content")
-    public void content(@RequestBody String content) {
-        // Logic to handle content creation or management
-        System.out.println("Handling content: " + content);
-        // You can add your content handling logic here
     }
 }

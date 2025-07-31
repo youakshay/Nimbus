@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Table("users")
 public record User(
-    @Id String id,
+    @Id Long id,
     String username,
     String fullName,
     String email,
