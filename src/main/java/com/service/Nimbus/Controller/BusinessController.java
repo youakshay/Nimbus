@@ -1,17 +1,37 @@
 package com.service.Nimbus.Controller;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.service.Nimbus.Model.Trip;
+import com.service.Nimbus.Respository.PoolMemberRepository;
+import com.service.Nimbus.Respository.PoolRepository;
+import com.service.Nimbus.Respository.TripRepository;
+import com.service.Nimbus.Service.RidePoolService;
+import com.service.Nimbus.util.JwtUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/business")
 public class BusinessController {
+
+    private final RidePoolService ridePoolService;
+    private final JwtUtil jwtUtil;
+
+    public BusinessController(RidePoolService ridePoolService, JwtUtil jwtUtil) {
+        this.ridePoolService=ridePoolService;
+        this.jwtUtil=jwtUtil;
+    }
     @PostMapping("/content")
     public void content(@RequestBody String content) {
-        // Logic to handle content creation or management
         System.out.println("Handling content: " + content);
-        // You can add your content handling logic here
+    }
+
+    @PostMapping("/trip")
+    public ResponseEntity<?> requestTrip(@RequestBody Trip trip, HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        String token = header.substring(7);
+        String username = jwtUtil.extractUsername(token);
+        return ridePoolService.requestTrip(trip, username);
     }
 }

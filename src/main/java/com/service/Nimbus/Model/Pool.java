@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Table("pools")
 public record Pool(
         @Id Long id,
-        Long ride_id,
         String from_location,
         String to_location,
         LocalDateTime departure_time,
