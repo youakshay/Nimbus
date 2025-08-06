@@ -1,4 +1,14 @@
 # Nimbus - Ride Pooling Platform
+## Features
+- **User Authentication and Authorization**
+   - JWt-based authentication and Redis-backed token blacklist for secure logout.
+- **Ride Pooling Logic**
+  - Dynamic user-to-pool matching based on route overlap and seat availability.
+  - Membership validation ensuring users can only view pools they are part of.
+- **RESTful API Design**
+  - DTO-based request/response models with input validation
+  - Modular architecture(controllers, Services, Repositories) for clean code separation.
+  
 ## Tech Stack
 - **Backend:** Java 17, Spring Boot(Web, Security, Data JPA)
 - **Database:** PostgreSQL
