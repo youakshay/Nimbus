@@ -17,10 +17,12 @@
 - **Build Tool:** Maven
 
 ## Getting Started
+
+### Prerequisites
 - Java 17+
 - Docker installed
 
-## Steps
+### Steps
 
 1. Clone the repository:
    ```
