@@ -51,21 +51,21 @@ public class UpdateUserDetails {
         Optional<User> user = crudRepo.findByUsername(username);
         String oldPassword = updatedPassword.oldPassword();
 
-        if(!passwordEncoder.matches(oldPassword, user.get().password())) {
+        if(!passwordEncoder.matches(oldPassword, user.get().getPassword())) {
             throw new IllegalArgumentException("Old password is not correct");
         }
 
         String newPassword = updatedPassword.newPassword();
         String hashedPassword = passwordEncoder.encode(newPassword);
-        System.out.println(user.get().id());
+        System.out.println(user.get().getId());
         User updatedUser = new User(
-                user.get().id(),
-                user.get().username(),
-                user.get().fullName(),
-                user.get().email(),
+                user.get().getId(),
+                user.get().getUsername(),
+                user.get().getFullName(),
+                user.get().getEmail(),
                 hashedPassword,
-                user.get().userRole(),
-                user.get().createdAt()
+                user.get().getUserRole(),
+                user.get().getCreatedAt()
         );
         crudRepo.save(updatedUser);
 

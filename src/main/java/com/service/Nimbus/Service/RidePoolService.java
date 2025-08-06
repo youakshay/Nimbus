@@ -32,56 +32,49 @@ public class RidePoolService {
     public ResponseEntity<?> requestTrip(Trip trip, String username) {
         Long user_id = crudRepo.findIdFromUsername(username);
         Trip newTrip = new Trip(
-                trip.id(),
-                trip.from_location(),
-                trip.to_location(),
-                trip.departure_time(),
-                trip.seats_required(),
+                trip.getId(),
+                trip.getFrom_location(),
+                trip.getTo_location(),
+                trip.getDeparture_time(),
+                trip.getSeats_required(),
                 user_id
         );
         Trip savedTrip = tripRepository.save(newTrip);
 
-        List<Pool> poolList = poolRepository.searchPool(trip.from_location(),
-                trip.to_location(),
-                trip.departure_time(),
-                trip.seats_required());
+        List<Pool> poolList = poolRepository.searchPool(trip.getFrom_location(),
+                                                        trip.getTo_location(),
+                                                        trip.getDeparture_time(),
+                                                        trip.getSeats_required());
+        Pool newPool;
         if(poolList.size() == 0){
-            Pool newPool = new Pool(
+            newPool = new Pool(
                     null,
-                    trip.from_location(),
-                    trip.to_location(),
-                    trip.departure_time(),
+                    trip.getFrom_location(),
+                    trip.getTo_location(),
+                    trip.getDeparture_time(),
                     4,
-                    4-trip.seats_required()
+                    4-trip.getSeats_required()
             );
-            Pool savedPool = poolRepository.save(newPool);
-            System.out.println(savedPool);
-            PoolMember poolMember = new PoolMember(
-                    null,
-                    savedPool.id(),
-                    savedTrip.id()
-            );
-            poolMemberRepository.save(poolMember);
         }else{
             Pool currPool = poolList.get(0);
-            Pool newPool = new Pool(
-                    currPool.id(),
-                    currPool.from_location(),
-                    currPool.to_location(),
-                    currPool.departure_time(),
-                    currPool.capacity(),
-                    currPool.seats_available() - trip.seats_required()
+            newPool = new Pool(
+                    currPool.getId(),
+                    currPool.getFrom_location(),
+                    currPool.getTo_location(),
+                    currPool.getDeparture_time(),
+                    currPool.getCapacity(),
+                    currPool.getSeats_available() - trip.getSeats_required()
             );
-            Pool savedPool = poolRepository.save(newPool);
-            PoolMember poolMember = new PoolMember(
-                    null,
-                    savedPool.id(),
-                    savedTrip.id()
-            );
-            System.out.println(savedPool);
-            poolMemberRepository.save(poolMember);
         }
+        Pool savedPool = poolRepository.save(newPool);
+        System.out.println(savedPool);
+        PoolMember poolMember = new PoolMember(
+                null,
+                savedPool.getId(),
+                savedTrip.getId()
+        );
+        poolMemberRepository.save(poolMember);
         System.out.println(poolList);
-        return ResponseEntity.ok(poolList);
+        return ResponseEntity.ok(savedPool);
     }
 }
