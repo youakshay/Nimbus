@@ -23,9 +23,6 @@ public class FetchPoolDetails {
 
 
     public ResponseEntity<?> fetchPoolMembers(PoolDetailsRequest poolDetailsRequest, String username) {
-        System.out.println(poolDetailsRequest.id());
-        System.out.println(username);
-        System.out.println(poolMemberRepository.isUserMemberOfPool(poolDetailsRequest.id(), username));
         if(poolMemberRepository.isUserMemberOfPool(poolDetailsRequest.id(), username) > 0) {
             List<PoolDetailsResponse> users = poolMemberRepository.fetchMembers(poolDetailsRequest.id());
             return ResponseEntity.ok(users);

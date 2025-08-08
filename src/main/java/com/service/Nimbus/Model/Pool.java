@@ -10,22 +10,26 @@ public class Pool {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String from_location;
-    private String to_location;
-    private LocalDateTime departure_time;
+    @Column(name = "from_location")
+    private String fromLocation;
+    @Column(name = "to_location")
+    private String toLocation;
+    @Column(name = "departure_time")
+    private LocalDateTime departureTime;
     private int capacity;
-    private int seats_available;
+    @Column(name = "seats_available")
+    private int seatsAvailable;
 
     public Pool() {
     }
 
-    public Pool(Long id, String from_location, String to_location, LocalDateTime departure_time, int capacity, int seats_available) {
+    public Pool(Long id, String fromLocation, String toLocation, LocalDateTime departureTime, int capacity, int seatsAvailable) {
         this.id = id;
-        this.from_location = from_location;
-        this.to_location = to_location;
-        this.departure_time = departure_time;
+        this.fromLocation = fromLocation;
+        this.toLocation = toLocation;
+        this.departureTime = departureTime;
         this.capacity = capacity;
-        this.seats_available = seats_available;
+        this.seatsAvailable = seatsAvailable;
     }
 
     public Long getId() {
@@ -36,28 +40,28 @@ public class Pool {
         this.id = id;
     }
 
-    public String getFrom_location() {
-        return from_location;
+    public String getFromLocation() {
+        return fromLocation;
     }
 
-    public void setFrom_location(String from_location) {
-        this.from_location = from_location;
+    public void setFromLocation(String from_location) {
+        this.fromLocation = from_location;
     }
 
-    public String getTo_location() {
-        return to_location;
+    public String getToLocation() {
+        return toLocation;
     }
 
-    public void setTo_location(String to_location) {
-        this.to_location = to_location;
+    public void setToLocation(String to_location) {
+        this.toLocation = to_location;
     }
 
-    public LocalDateTime getDeparture_time() {
-        return departure_time;
+    public LocalDateTime getDepartureTime() {
+        return departureTime;
     }
 
-    public void setDeparture_time(LocalDateTime departure_time) {
-        this.departure_time = departure_time;
+    public void setDepartureTime(LocalDateTime departure_time) {
+        this.departureTime = departure_time;
     }
 
     public int getCapacity() {
@@ -68,12 +72,12 @@ public class Pool {
         this.capacity = capacity;
     }
 
-    public int getSeats_available() {
-        return seats_available;
+    public int getSeatsAvailable() {
+        return seatsAvailable;
     }
 
-    public void setSeats_available(int seats_available) {
-        this.seats_available = seats_available;
+    public void setSeatsAvailable(int seats_available) {
+        this.seatsAvailable = seats_available;
     }
 
 }

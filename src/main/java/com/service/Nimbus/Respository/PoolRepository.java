@@ -15,7 +15,7 @@ public interface PoolRepository extends CrudRepository<Pool, Long> {
             "and to_location = :to " +
             "and departure_time = :time " +
             "and seats_available >= :seats", nativeQuery = true)
-    public List<Pool> searchPool(@Param("from") String from_location,
+    List<Pool> searchPool(@Param("from") String from_location,
                                  @Param("to") String to_location,
                                  @Param("time")LocalDateTime departure,
                                  @Param("seats") int seats_required);
