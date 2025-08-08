@@ -19,4 +19,6 @@ public interface PoolRepository extends CrudRepository<Pool, Long> {
                                  @Param("to") String to_location,
                                  @Param("time")LocalDateTime departure,
                                  @Param("seats") int seats_required);
+
+    void deleteById(Long id);
 }

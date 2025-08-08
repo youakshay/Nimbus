@@ -5,6 +5,7 @@ import com.service.Nimbus.Model.Trip;
 import com.service.Nimbus.Respository.PoolMemberRepository;
 import com.service.Nimbus.Respository.PoolRepository;
 import com.service.Nimbus.Respository.TripRepository;
+import com.service.Nimbus.Service.CancelTrip;
 import com.service.Nimbus.Service.FetchPoolDetails;
 import com.service.Nimbus.Service.RidePoolService;
 import com.service.Nimbus.util.JwtUtil;
@@ -20,13 +21,16 @@ public class BusinessController {
     private final RidePoolService ridePoolService;
     private final FetchPoolDetails fetchPoolDetails;
     private final JwtUtil jwtUtil;
+    private final CancelTrip cancelTrip;
 
     public BusinessController(RidePoolService ridePoolService,
                               JwtUtil jwtUtil,
-                              FetchPoolDetails fetchPoolDetails) {
+                              FetchPoolDetails fetchPoolDetails,
+                              CancelTrip cancelTrip) {
         this.ridePoolService=ridePoolService;
         this.jwtUtil=jwtUtil;
         this.fetchPoolDetails=fetchPoolDetails;
+        this.cancelTrip=cancelTrip;
     }
     @PostMapping("/content")
     public void content(@RequestBody String content) {
@@ -47,5 +51,13 @@ public class BusinessController {
         String token = header.substring(7);
         String username = jwtUtil.extractUsername(token);
         return fetchPoolDetails.fetchPoolMembers(poolDetailsRequest, username);
+    }
+
+    @GetMapping("/cancelTrip")
+    public ResponseEntity<?> cancelTrip(HttpServletRequest request) {
+        String header = request.getHeader("Authorization");
+        String token = header.substring(7);
+        String username = jwtUtil.extractUsername(token);
+        return cancelTrip.cancelUserTrip(username);
     }
 }
