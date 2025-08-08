@@ -9,13 +9,15 @@ public class PoolMember {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long pool_id;
-    private Long trip_id;
+    @Column(name = "pool_id")
+    private Long poolId;
+    @Column(name = "trip_id")
+    private Long tripId;
 
-    public PoolMember(Long id, Long pool_id, Long trip_id) {
+    public PoolMember(Long id, Long poolId, Long tripId) {
         this.id = id;
-        this.pool_id = pool_id;
-        this.trip_id = trip_id;
+        this.poolId = poolId;
+        this.tripId = tripId;
     }
 
     public PoolMember() {
@@ -30,19 +32,19 @@ public class PoolMember {
         this.id = id;
     }
 
-    public Long getPool_id() {
-        return pool_id;
+    public Long getPoolId() {
+        return poolId;
     }
 
-    public void setPool_id(Long pool_id) {
-        this.pool_id = pool_id;
+    public void setPoolId(Long pool_id) {
+        this.poolId = pool_id;
     }
 
-    public Long getTrip_id() {
-        return trip_id;
+    public Long getTripId() {
+        return tripId;
     }
 
-    public void setTrip_id(Long trip_id) {
-        this.trip_id = trip_id;
+    public void setTripId(Long trip_id) {
+        this.tripId = trip_id;
     }
 }

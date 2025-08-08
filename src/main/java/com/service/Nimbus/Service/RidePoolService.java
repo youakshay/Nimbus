@@ -33,37 +33,37 @@ public class RidePoolService {
         Long user_id = crudRepo.findIdFromUsername(username);
         Trip newTrip = new Trip(
                 trip.getId(),
-                trip.getFrom_location(),
-                trip.getTo_location(),
-                trip.getDeparture_time(),
-                trip.getSeats_required(),
+                trip.getFromLocation(),
+                trip.getToLocation(),
+                trip.getDepartureTime(),
+                trip.getSeatsRequired(),
                 user_id
         );
         Trip savedTrip = tripRepository.save(newTrip);
 
-        List<Pool> poolList = poolRepository.searchPool(trip.getFrom_location(),
-                                                        trip.getTo_location(),
-                                                        trip.getDeparture_time(),
-                                                        trip.getSeats_required());
+        List<Pool> poolList = poolRepository.searchPool(trip.getFromLocation(),
+                                                        trip.getToLocation(),
+                                                        trip.getDepartureTime(),
+                                                        trip.getSeatsRequired());
         Pool newPool;
         if(poolList.size() == 0){
             newPool = new Pool(
                     null,
-                    trip.getFrom_location(),
-                    trip.getTo_location(),
-                    trip.getDeparture_time(),
+                    trip.getFromLocation(),
+                    trip.getToLocation(),
+                    trip.getDepartureTime(),
                     4,
-                    4-trip.getSeats_required()
+                    4-trip.getSeatsRequired()
             );
         }else{
             Pool currPool = poolList.get(0);
             newPool = new Pool(
                     currPool.getId(),
-                    currPool.getFrom_location(),
-                    currPool.getTo_location(),
-                    currPool.getDeparture_time(),
+                    currPool.getFromLocation(),
+                    currPool.getToLocation(),
+                    currPool.getDepartureTime(),
                     currPool.getCapacity(),
-                    currPool.getSeats_available() - trip.getSeats_required()
+                    currPool.getSeatsAvailable() - trip.getSeatsRequired()
             );
         }
         Pool savedPool = poolRepository.save(newPool);

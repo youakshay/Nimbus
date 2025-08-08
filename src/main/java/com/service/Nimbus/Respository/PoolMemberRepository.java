@@ -11,6 +11,17 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PoolMemberRepository extends JpaRepository<PoolMember, Long> {
+    @Query(value = """
+    select pool_id from pool_members
+    where trip_id = :tripId
+""", nativeQuery = true)
+    Long findPoolIdByTripId(@Param("tripId") Long tripId);
+
+    @Query(value = """
+    select count(*) from pool_members
+    where pool_id = :poolId
+""", nativeQuery = true)
+    Long countNoOfMembersInAPool(@Param("poolId") Long poolId);
 
     @Query(value = """
     select u.username, u.full_name, u.email, t.seats_required
@@ -29,4 +40,5 @@ public interface PoolMemberRepository extends JpaRepository<PoolMember, Long> {
     where pm.pool_id = :poolId and u.username = :username
 """, nativeQuery = true)
     int isUserMemberOfPool(@Param("poolId") Long poolId, @Param("username") String username);
+
 }
