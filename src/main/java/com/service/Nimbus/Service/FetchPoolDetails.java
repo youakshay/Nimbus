@@ -21,13 +21,13 @@ public class FetchPoolDetails {
         this.poolMemberRepository=poolMemberRepository;
     }
 
-
-    public ResponseEntity<?> fetchPoolMembers(PoolDetailsRequest poolDetailsRequest, String username) {
-        if(poolMemberRepository.isUserMemberOfPool(poolDetailsRequest.id(), username) > 0) {
-            List<PoolDetailsResponse> users = poolMemberRepository.fetchMembers(poolDetailsRequest.id());
+    public ResponseEntity<?> fetchPoolMembers(String username) {
+        Long poolId = poolMemberRepository.getPoolId(username);
+        System.out.println("User belongs from pool: "+poolId);
+        List<PoolDetailsResponse> users = poolMemberRepository.fetchMembers(poolId);
+        if(users.size() > 0){
             return ResponseEntity.ok(users);
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body("User not found in pool");
+        return ResponseEntity.badRequest().body("You have no active pool!!!");
     }
 }
