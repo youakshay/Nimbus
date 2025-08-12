@@ -45,12 +45,13 @@ public class BusinessController {
         return ridePoolService.requestTrip(trip, username);
     }
 
-    @PostMapping("/fetchTripDetails")
-    public ResponseEntity<?> fetchTripDetails(@RequestBody PoolDetailsRequest poolDetailsRequest, HttpServletRequest request) {
+    @GetMapping("/fetchTripDetails")
+    public ResponseEntity<?> fetchTripDetails(HttpServletRequest request) {
         String header = request.getHeader("Authorization");
         String token = header.substring(7);
         String username = jwtUtil.extractUsername(token);
-        return fetchPoolDetails.fetchPoolMembers(poolDetailsRequest, username);
+        System.out.println(username);
+        return fetchPoolDetails.fetchPoolMembers(username);
     }
 
     @GetMapping("/cancelTrip")

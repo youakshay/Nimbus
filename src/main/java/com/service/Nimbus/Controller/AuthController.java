@@ -40,10 +40,10 @@ public class AuthController {
         this.updateUserDetails = updateUserDetails;
     }
 
-    @GetMapping("/health")
-    public void health() {
+    @GetMapping("/ping")
+    public ResponseEntity<?> health() {
         // Logic to check the health of the service
-        System.out.println("Service is running and healthy.");
+        return ResponseEntity.ok().body("PONG");
     }
 
     @PostMapping("/register")
@@ -76,7 +76,7 @@ public class AuthController {
         return ResponseEntity.ok(new JwtResponse(Token));
     }
 
-    @PostMapping("/logout")
+    @GetMapping ("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
         System.out.println("Logout called");
         String header = request.getHeader("Authorization");
