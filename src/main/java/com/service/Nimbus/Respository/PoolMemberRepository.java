@@ -18,12 +18,6 @@ public interface PoolMemberRepository extends JpaRepository<PoolMember, Long> {
     Long findPoolIdByTripId(@Param("tripId") Long tripId);
 
     @Query(value = """
-    select count(*) from pool_members
-    where pool_id = :poolId
-""", nativeQuery = true)
-    Long countNoOfMembersInAPool(@Param("poolId") Long poolId);
-
-    @Query(value = """
     SELECT u.username, u.full_name, u.email, t.seats_required
     FROM pool_members pm
     JOIN trips t ON t.id = pm.trip_id
@@ -40,14 +34,5 @@ public interface PoolMemberRepository extends JpaRepository<PoolMember, Long> {
     where u.username = :username
 """, nativeQuery = true)
     Long getPoolId(@Param("username") String username);
-
-    @Query(value = """
-    SELECT count(*)
-    From pool_members pm
-    JOIN trips t ON pm.trip_id = t.id
-    JOIN users u ON t.user_id = u.id
-    where pm.pool_id = :poolId and u.username = :username
-""", nativeQuery = true)
-    int isUserMemberOfPool(@Param("poolId") Long poolId, @Param("username") String username);
 
 }
