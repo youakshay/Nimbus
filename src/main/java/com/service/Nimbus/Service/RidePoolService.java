@@ -18,18 +18,22 @@ public class RidePoolService {
     private final PoolRepository poolRepository;
     private final PoolMemberRepository poolMemberRepository;
     private final CrudRepo crudRepo;
+    private final CancelTrip cancelTrip;
 
     public RidePoolService(TripRepository tripRepository,
                            PoolRepository poolRepository,
                            PoolMemberRepository poolMemberRepository,
-                           CrudRepo crudRepo) {
+                           CrudRepo crudRepo,
+                           CancelTrip cancelTrip) {
         this.tripRepository = tripRepository;
         this.poolRepository = poolRepository;
         this.poolMemberRepository = poolMemberRepository;
         this.crudRepo=crudRepo;
+        this.cancelTrip=cancelTrip;
     }
 
     public ResponseEntity<?> requestTrip(Trip trip, String username) {
+        ResponseEntity<?> garbage = cancelTrip.cancelUserTrip(username);
         Long user_id = crudRepo.findIdFromUsername(username);
         Trip newTrip = new Trip(
                 trip.getId(),

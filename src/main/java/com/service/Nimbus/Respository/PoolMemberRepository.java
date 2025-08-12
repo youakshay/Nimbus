@@ -18,6 +18,12 @@ public interface PoolMemberRepository extends JpaRepository<PoolMember, Long> {
     Long findPoolIdByTripId(@Param("tripId") Long tripId);
 
     @Query(value = """
+    select count(*) from pool_members
+    where pool_id = :poolId
+""", nativeQuery = true)
+    Long countNoOfMembersInAPool(@Param("poolId") Long poolId);
+
+    @Query(value = """
     SELECT u.username, u.full_name, u.email, t.seats_required
     FROM pool_members pm
     JOIN trips t ON t.id = pm.trip_id
