@@ -18,6 +18,9 @@ services:
       - redis_data:/data
   Nimbus:
     image: nimbus
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - postgres
       - Redis
